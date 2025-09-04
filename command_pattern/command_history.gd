@@ -9,22 +9,35 @@ func _input(_event: InputEvent) -> void:
 		redo()
 
 var history: Array[Command] = []
-var undone: Array[Command] = []  # holds undone commands
+var undone: Array[Command] = []
 
 func do(command: Command):
+	if command:
+		command.execute()
+		history.append(command)
+
+# used when holding down to paint multiple tiles
+# slight deviation from the pattern to allow more units of work
+func do_without_save(command: Command):
 	command.execute()
-	history.append(command)
+
+func save(command: Command):
+	if command:
+		history.append(command)
+#
 
 func undo():
 	if history.is_empty():
 		return
 	var cmd = history.pop_back()
-	cmd.undo()
-	undone.append(cmd)
+	if cmd:
+		cmd.undo()
+		undone.append(cmd)
 
 func redo():
 	if undone.is_empty():
 		return
 	var cmd = undone.pop_back()
-	cmd.execute()
-	history.append(cmd)
+	if cmd:
+		cmd.execute()
+		history.append(cmd)

@@ -3,7 +3,7 @@ extends Node
 @onready var tile_map : TileMapLayer = %TileMapLayer
 @onready var camera : Camera2D = %Camera2D
 
-# @onready var DrawCommand = load("res://command_pattern/draw_command.gd")
+@onready var currentAction: WrapperCommand
 
 var selected_pos : Vector2 = Vector2.ZERO
 var selected : bool = false:
@@ -30,8 +30,19 @@ func _input(event: InputEvent) -> void:
 			
 			if %ModeManager.current_mode == 2:
 				if Input.is_action_pressed("left_click"):
+					
+					# NOTE zie settings autoload
+					# create new currentAction if empty
+					if !currentAction:
+						currentAction = WrapperCommand.new()
+					
 					paint(hover_pos)
-		
+	
+	# check for a realise in painting if so save the current action
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and Input.is_action_just_released("left_click"):
+			CommandHistory.save(currentAction)
+			currentAction = null
 
 func select_hex(pos : Vector2) -> void:
 	if (pos == selected_pos and selected) or %TileDataManager.is_out_of_bounds(pos):
@@ -58,6 +69,10 @@ func make_action(pos : Vector2):
 		1:
 			select_hex(pos)
 		2:
+			# NOTE zie settings autoload
+			# create new currentAction if empty
+			if !currentAction:
+				currentAction = WrapperCommand.new()
 			paint(pos)
 		_:
 			print("%s: mode %s doesnt exist " % [name, %ModeManager.current_mode])
@@ -69,7 +84,10 @@ func paint(pos : Vector2):
 	
 	# check before we do the command if this even is a command...
 	if old_paint != %ModeManager.current_paint_alt:
+		
 		var drw_cmd = DrawCommand.new(tile_map, pos, %ModeManager.current_paint_alt, old_paint)
-		CommandHistory.do(drw_cmd);
-		#var current_atlas_coords = tile_map.get_cell_atlas_coords(pos)
-		#tile_map.set_cell(pos, tile_map.get_cell_source_id(pos), current_atlas_coords, %ModeManager.current_paint_alt)
+		CommandHistory.do_without_save(drw_cmd);
+		
+		# only extend real drawwings! no selects
+		#if %ModeManager.current_paint_alt == 1:
+		currentAction.extend(drw_cmd);

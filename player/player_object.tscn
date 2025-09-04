@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://biodararsboma"]
+[gd_scene load_steps=17 format=4 uid="uid://biodararsboma"]
 
 [ext_resource type="Script" uid="uid://bush2mc8p2lfj" path="res://player/drag_zoom.gd" id="1_7qfh8"]
 [ext_resource type="Texture2D" uid="uid://ts4vif2t0uo2" path="res://hex_grid.png" id="2_q03rr"]
@@ -10,7 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://cpuk78oep3jpw" path="res://icon.svg" id="5_vetnn"]
 [ext_resource type="Script" uid="uid://cu4jd1e7buq54" path="res://player/text_writer.gd" id="6_eothe"]
 [ext_resource type="Script" uid="uid://cc3ps21i3xu53" path="res://command_pattern/commands.gd" id="10_ah2pu"]
+[ext_resource type="Script" uid="uid://djpkhwyfi6ok7" path="res://paints/paintpallet.gd" id="10_vivi0"]
 [ext_resource type="Script" uid="uid://cnr3jrtdmrnia" path="res://command_pattern/draw_command.gd" id="11_vivi0"]
+[ext_resource type="Script" uid="uid://dplgrnnwel83f" path="res://command_pattern/wrapper_command.gd" id="12_ah2pu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ut0x"]
 texture = ExtResource("2_q03rr")
@@ -44,6 +46,10 @@ tile_shape = 3
 tile_offset_axis = 1
 tile_size = Vector2i(102, 94)
 sources/0 = SubResource("TileSetAtlasSource_5ut0x")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vivi0"]
+atlas = ExtResource("2_q03rr")
+region = Rect2(265, 8, 110, 96)
 
 [node name="PlayerObject" type="Node2D"]
 
@@ -128,7 +134,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="HexTexture" type="TextureRect" parent="UI/CanvasLayer/HexInfo"]
-visible = false
 layout_mode = 2
 texture = ExtResource("5_vetnn")
 
@@ -147,12 +152,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="UIButtons" type="HBoxContainer" parent="UI/CanvasLayer"]
-visible = false
+[node name="UIButtons" type="GridContainer" parent="UI/CanvasLayer"]
 offset_left = 15.0
 offset_top = 15.0
 offset_right = 219.0
-offset_bottom = 115.0
+offset_bottom = 219.0
+script = ExtResource("10_vivi0")
 
 [node name="SelectButton" type="TextureButton" parent="UI/CanvasLayer/UIButtons"]
 custom_minimum_size = Vector2(100, 100)
@@ -199,6 +204,10 @@ grow_vertical = 2
 text = "Paint"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TextureButton" type="TextureButton" parent="UI/CanvasLayer/UIButtons"]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_vivi0")
 
 [node name="ModeLabel" type="Label" parent="UI/CanvasLayer"]
 unique_name_in_owner = true
@@ -261,3 +270,6 @@ script = ExtResource("10_ah2pu")
 
 [node name="DrawCommand" type="Node" parent="Commands"]
 script = ExtResource("11_vivi0")
+
+[node name="WrapperCommand" type="Node" parent="Commands"]
+script = ExtResource("12_ah2pu")
