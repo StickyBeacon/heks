@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4yycxpaeue0p"]
-
-[ext_resource type="PackedScene" uid="uid://biodararsboma" path="res://player/player_object.tscn" id="4_dqtar"]
-
-[node name="Tilemap" type="Node2D"]
-
-[node name="PlayerObject" parent="." instance=ExtResource("4_dqtar")]
-position = Vector2(988, 376)
