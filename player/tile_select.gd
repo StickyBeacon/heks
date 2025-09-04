@@ -3,6 +3,8 @@ extends Node
 @onready var tile_map : TileMapLayer = %TileMapLayer
 @onready var camera : Camera2D = %Camera2D
 
+# @onready var DrawCommand = load("res://command_pattern/draw_command.gd")
+
 var selected_pos : Vector2 = Vector2.ZERO
 var selected : bool = false:
 	set(value):
@@ -62,5 +64,12 @@ func make_action(pos : Vector2):
 
 
 func paint(pos : Vector2):
-	var current_atlas_coords = tile_map.get_cell_atlas_coords(pos)
-	tile_map.set_cell(pos, tile_map.get_cell_source_id(pos), current_atlas_coords, %ModeManager.current_paint_alt)
+	#var drw_cmd = DrawCommand.new(tile_map)
+	var old_paint = tile_map.get_cell_alternative_tile(pos)
+	
+	# check before we do the command if this even is a command...
+	if old_paint != %ModeManager.current_paint_alt:
+		var drw_cmd = DrawCommand.new(tile_map, pos, %ModeManager.current_paint_alt, old_paint)
+		CommandHistory.do(drw_cmd);
+		#var current_atlas_coords = tile_map.get_cell_atlas_coords(pos)
+		#tile_map.set_cell(pos, tile_map.get_cell_source_id(pos), current_atlas_coords, %ModeManager.current_paint_alt)

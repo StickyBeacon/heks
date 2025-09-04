@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://biodararsboma"]
+[gd_scene load_steps=14 format=4 uid="uid://biodararsboma"]
 
 [ext_resource type="Script" uid="uid://bush2mc8p2lfj" path="res://player/drag_zoom.gd" id="1_7qfh8"]
 [ext_resource type="Texture2D" uid="uid://ts4vif2t0uo2" path="res://hex_grid.png" id="2_q03rr"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" uid="uid://1nj2br6wb1ra" path="res://player/tile_data_manager.gd" id="5_rlfc0"]
 [ext_resource type="Texture2D" uid="uid://cpuk78oep3jpw" path="res://icon.svg" id="5_vetnn"]
 [ext_resource type="Script" uid="uid://cu4jd1e7buq54" path="res://player/text_writer.gd" id="6_eothe"]
+[ext_resource type="Script" uid="uid://cc3ps21i3xu53" path="res://command_pattern/commands.gd" id="10_ah2pu"]
+[ext_resource type="Script" uid="uid://cnr3jrtdmrnia" path="res://command_pattern/draw_command.gd" id="11_vivi0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ut0x"]
 texture = ExtResource("2_q03rr")
@@ -253,3 +255,9 @@ scale = Vector2(0.487636, 0.487636)
 texture = ExtResource("2_q03rr")
 region_enabled = true
 region_rect = Rect2(265, 7, 110, 96)
+
+[node name="Commands" type="Node" parent="."]
+script = ExtResource("10_ah2pu")
+
+[node name="DrawCommand" type="Node" parent="Commands"]
+script = ExtResource("11_vivi0")
